@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steganography Tool</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔐 Steganography Tool</h1>
+            <p class="subtitle">Hide secret messages in images using LSB encoding</p>
+        </header>
+
+        <div class="content">
+            <div class="tabs">
+                <button class="tab-button active" onclick="switchTab('encode')">Encode</button>
+                <button class="tab-button" onclick="switchTab('decode')">Decode</button>
+            </div>
+
+            <!-- Encode Tab -->
+            <div id="encode-tab" class="tab-content active">
+                <div class="card">
+                    <h2>Hide Message in Image</h2>
+                    <form id="encode-form">
+                        <div class="form-group">
+                            <label for="encode-image">Select Image (PNG recommended)</label>
+                            <input type="file" id="encode-image" accept="image/*" required>
+                            <div id="encode-preview" class="image-preview"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Secret Message</label>
+                            <textarea id="message" rows="5" placeholder="Enter your secret message here..." required></textarea>
+                            <div class="char-count">
+                                <span id="char-count">0</span> characters
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="encode-password">Password (Optional) 🔒</label>
+                            <input type="password" id="encode-password" placeholder="Leave empty for no encryption">
+                            <small class="hint">Password will be hashed with SHA-256 and used for AES encryption</small>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <span class="btn-text">Encode Message</span>
+                            <span class="loader" style="display: none;"></span>
+                        </button>
+                    </form>
+
+                    <div id="encode-result" class="result" style="display: none;">
+                        <div class="success-message">
+                            <p>✅ Message encoded successfully!</p>
+                            <button id="download-btn" class="btn btn-success">Download Encoded Image</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decode Tab -->
+            <div id="decode-tab" class="tab-content">
+                <div class="card">
+                    <h2>Extract Hidden Message</h2>
+                    <form id="decode-form">
+                        <div class="form-group">
+                            <label for="decode-image">Select Encoded Image</label>
+                            <input type="file" id="decode-image" accept="image/*" required>
+                            <div id="decode-preview" class="image-preview"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="decode-password">Password (If encrypted) 🔒</label>
+                            <input type="password" id="decode-password" placeholder="Leave empty if no password was used">
+                            <small class="hint">Must match the password used during encoding</small>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <span class="btn-text">Decode Message</span>
+                            <span class="loader" style="display: none;"></span>
+                        </button>
+                    </form>
+
+                    <div id="decode-result" class="result" style="display: none;">
+                        <h3>Hidden Message:</h3>
+                        <div class="message-output" id="decoded-message"></div>
+                        <button id="copy-btn" class="btn btn-secondary">Copy to Clipboard</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Built with ❤️ using HTML, CSS, JavaScript & Go</p>
+            <p class="info">LSB (Least Significant Bit) Steganography</p>
+        </footer>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
