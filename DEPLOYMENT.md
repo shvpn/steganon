@@ -7,12 +7,12 @@
 
 1. **Upload files to your server:**
 ```bash
-scp -r Stegano/ user@54.169.158.30:/tmp/
+scp -r Stegano/ user@<ServerIP>:/tmp/
 ```
 
 2. **SSH into your server:**
 ```bash
-ssh user@54.169.158.30
+ssh user@<ServerIP>
 ```
 
 3. **Move files and run deployment script:**
@@ -43,7 +43,7 @@ Before deployment, ensure your DNS is configured:
 2. Create an A record:
    - **Type**: A
    - **Name**: stegano
-   - **Value**: 54.169.158.30
+   - **Value**: ServerIP
    - **TTL**: 300 (or Auto)
 
 3. Wait for propagation (5-15 minutes)
