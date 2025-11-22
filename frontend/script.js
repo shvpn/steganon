@@ -1,4 +1,8 @@
-const API_BASE_URL = 'http://localhost:8080/api';
+// Use relative URL for production (Nginx will proxy to backend)
+// Change to 'http://localhost:8080/api' for local development
+const API_BASE_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:8080/api' 
+    : '/api';
 
 let encodedImageBlob = null;
 

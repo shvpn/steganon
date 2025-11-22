@@ -4,24 +4,40 @@ A modern web-based steganography tool that allows you to hide secret messages in
 
 ## Features
 
+### Core Features
 - **Encode Messages**: Hide secret text messages inside PNG images
 - **Decode Messages**: Extract hidden messages from encoded images
 - **LSB Steganography**: Uses Least Significant Bit technique for invisible message embedding
-- **User-Friendly Interface**: Modern, responsive dark-themed UI
+- **Password Protection**: Optional AES-256-GCM encryption with SHA-256 hashed passwords
 - **Real-time Preview**: See your images before encoding/decoding
 - **Download Encoded Images**: Save your steganographic images locally
 - **Copy to Clipboard**: Easily copy decoded messages
+
+### Performance & Responsiveness
+- **Fast Processing**: Efficient Go backend handles images quickly
+- **Responsive Design**: Mobile-first design works on all devices
+- **Minimal Dependencies**: No external libraries required, reducing overhead
+- **Concurrent Handling**: Go's goroutines enable multiple simultaneous requests
+- **Optimized Frontend**: Vanilla JavaScript for fast load times
+
+### Security Features
+- **AES-256-GCM Encryption**: Military-grade encryption for message protection
+- **SHA-256 Password Hashing**: Secure key derivation from passwords
+- **CORS Protection**: Configurable cross-origin resource sharing
+- **No Data Storage**: Messages are never stored on the server
+- **Client-Side Validation**: Input validation before API calls
+- **HTTPS Ready**: Designed for secure SSL/TLS deployment
 
 ## Technology Stack
 
 ### Frontend
 - HTML5
-- CSS3 (Modern gradient design with dark theme)
-- Vanilla JavaScript (No frameworks required)
+- CSS
+- JavaScript
 
 ### Backend
 - Go (Golang)
-- Standard library (no external dependencies)
+- Standard library
 - PNG image processing
 
 ## Project Structure
@@ -29,12 +45,22 @@ A modern web-based steganography tool that allows you to hide secret messages in
 ```
 Stegano/
 ├── backend/
-│   ├── main.go          # Go server with encode/decode endpoints
-│   └── go.mod           # Go module file
-└── frontend/
-    ├── index.html       # Main HTML file
-    ├── style.css        # Styling
-    └── script.js        # Frontend logic
+│   ├── main.go                    # Application entry point
+│   ├── go.mod                     # Go module file
+│   ├── handlers/
+│   │   ├── api.go                 # API handlers (encode/decode)
+│   │   └── static.go              # Static file serving
+│   └── utils/
+│       ├── crypto.go              # AES encryption/decryption
+│       └── steganography.go       # LSB steganography logic
+├── frontend/
+│   ├── index.html                 # Main HTML file
+│   ├── style.css                  # Styling
+│   └── script.js                  # Frontend logic
+├── deploy.sh                      # Automated deployment script
+├── update.sh                      # Quick update script
+├── DEPLOYMENT.md                  # Deployment guide
+└── README.md                      # Project documentation
 ```
 
 ## Installation & Setup
@@ -135,6 +161,288 @@ The tool combines **Least Significant Bit (LSB)** steganography with **AES encry
 - Without password, messages are hidden but not encrypted
 - Always use strong passwords for sensitive data
 - The same password must be used for both encoding and decoding
+
+## Production Deployment
+
+### Prerequisites
+- Ubuntu/Debian server (tested on Ubuntu 22.04)
+- Domain name pointed to your server
+- Root or sudo access
+
+### Step 1: Server Setup
+
+```bash
+# Update system packages
+sudo apt update && sudo apt upgrade -y
+
+# Install Go
+wget https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.21.5.linux-amd64.tar.gz
+echo 'export PATH=$PATH:/usr/local/bin/go' >> ~/.bashrc
+source ~/.bashrc
+
+# Verify Go installation
+go version
+```
+
+### Step 2: Deploy Application
+
+```bash
+# Create application directory
+sudo mkdir -p /var/www/stegano
+cd /var/www/stegano
+
+# Clone or copy your project files
+# Upload your Stegano folder to /var/www/stegano
+
+# Build the Go application
+cd /var/www/stegano/backend
+go build -o stegano main.go
+```
+
+### Step 3: Create Systemd Service
+
+Create a service file to run your application as a daemon:
+
+```bash
+sudo nano /etc/systemd/system/stegano.service
+```
+
+Add the following content:
+
+```ini
+[Unit]
+Description=Steganography Tool Service
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/stegano/backend
+ExecStart=/var/www/stegano/backend/stegano
+Restart=always
+RestartSec=5
+Environment=PORT=8080
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Enable and start the service:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable stegano
+sudo systemctl start stegano
+sudo systemctl status stegano
+```
+
+### Step 4: Install Nginx
+
+```bash
+# Install Nginx
+sudo apt install nginx -y
+
+# Create Nginx configuration
+sudo nano /etc/nginx/sites-available/stegano
+```
+
+Add the following configuration:
+
+```nginx
+server {
+    listen 80;
+    server_name stegano.shvpn.live;
+
+    # Increase max upload size for images
+    client_max_body_size 20M;
+
+    # Serve frontend files
+    location / {
+        root /var/www/stegano/frontend;
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Proxy API requests to Go backend
+    location /api/ {
+        proxy_pass http://localhost:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+Enable the site:
+
+```bash
+# Create symbolic link
+sudo ln -s /etc/nginx/sites-available/stegano /etc/nginx/sites-enabled/
+
+# Test Nginx configuration
+sudo nginx -t
+
+# Restart Nginx
+sudo systemctl restart nginx
+```
+
+### Step 5: Configure DNS
+
+Point your domain to your server:
+
+1. Go to your DNS provider (e.g., Cloudflare, GoDaddy, Namecheap)
+2. Add an **A Record**:
+   - **Type**: A
+   - **Name**: stegano (or @ for root domain)
+   - **Value**: 54.169.158.30
+   - **TTL**: Automatic or 300
+
+Wait for DNS propagation (usually 5-15 minutes).
+
+### Step 6: Install SSL Certificate with Certbot
+
+```bash
+# Install Certbot
+sudo apt install certbot python3-certbot-nginx -y
+
+# Obtain SSL certificate
+sudo certbot --nginx -d stegano.shvpn.live
+
+# Follow the prompts:
+# - Enter your email address
+# - Agree to terms of service
+# - Choose whether to redirect HTTP to HTTPS (recommended: Yes)
+```
+
+Certbot will automatically:
+- Obtain the SSL certificate
+- Configure Nginx to use HTTPS
+- Set up auto-renewal
+
+Test auto-renewal:
+
+```bash
+sudo certbot renew --dry-run
+```
+
+### Step 7: Configure Firewall
+
+```bash
+# Allow Nginx through firewall
+sudo ufw allow 'Nginx Full'
+sudo ufw allow OpenSSH
+sudo ufw enable
+sudo ufw status
+```
+
+### Step 8: Update Go Backend for Production
+
+Update the CORS settings in `backend/main.go` for production:
+
+```go
+func enableCORS(w http.ResponseWriter) {
+    w.Header().Set("Access-Control-Allow-Origin", "https://stegano.shvpn.live")
+    w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+    w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+}
+```
+
+Rebuild and restart:
+
+```bash
+cd /var/www/stegano/backend
+go build -o stegano main.go
+sudo systemctl restart stegano
+```
+
+### Step 9: Update Frontend API URL
+
+Update `frontend/script.js` to use the production domain:
+
+```javascript
+// Change from:
+const API_BASE_URL = 'http://localhost:8080/api';
+
+// To:
+const API_BASE_URL = '/api';  // Nginx will proxy to backend
+```
+
+### Verification
+
+Visit **https://stegano.shvpn.live** in your browser. You should see:
+- ✅ Secure HTTPS connection (padlock icon)
+- ✅ Your steganography tool interface
+- ✅ Ability to encode/decode images
+
+### Monitoring & Maintenance
+
+```bash
+# View application logs
+sudo journalctl -u stegano -f
+
+# Check Nginx logs
+sudo tail -f /var/log/nginx/access.log
+sudo tail -f /var/log/nginx/error.log
+
+# Restart services if needed
+sudo systemctl restart stegano
+sudo systemctl restart nginx
+
+# Check SSL certificate expiration
+sudo certbot certificates
+```
+
+### Performance Optimization
+
+Add caching headers in Nginx:
+
+```nginx
+# Add inside server block
+location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+    root /var/www/stegano/frontend;
+    expires 1y;
+    add_header Cache-Control "public, immutable";
+}
+```
+
+Enable Gzip compression:
+
+```nginx
+# Add inside server block
+gzip on;
+gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+gzip_min_length 1000;
+```
+
+### Troubleshooting
+
+**Service won't start:**
+```bash
+sudo journalctl -u stegano -n 50
+```
+
+**Nginx errors:**
+```bash
+sudo nginx -t
+sudo tail -f /var/log/nginx/error.log
+```
+
+**SSL certificate issues:**
+```bash
+sudo certbot certificates
+sudo certbot renew --force-renewal
+```
+
+**Port already in use:**
+```bash
+sudo lsof -i :8080
+sudo kill -9 <PID>
+```
 
 ## License
 
