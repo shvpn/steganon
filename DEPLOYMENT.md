@@ -1,6 +1,7 @@
 # Steganography Tool - Deployment Guide
 
-## Quick Start Deployment
+## This deployment is not really great.Howerver, it is best for low budget.
+**In this project i will use my own domain that point from cloudeflare while using nginx to forward proxy on port 8080 and using cert bot for ssl certificate**
 
 ### Option 1: Automated Deployment
 
