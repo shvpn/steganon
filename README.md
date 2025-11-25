@@ -1,4 +1,5 @@
-# Steganography Tool 🔐
+# Steganography Tool By Ork Senghout
+## Note: deploy and update script are for automate deployment.However, this might not work on some server. So we can deploy it manually throught this README
 
 A modern web-based steganography tool that allows you to hide secret messages inside images using LSB (Least Significant Bit) encoding. Built with HTML, CSS, JavaScript frontend and Go backend.
 
@@ -61,30 +62,8 @@ Stegano/
 ├── update.sh                      # Quick update script
 ├── DEPLOYMENT.md                  # Deployment guide
 └── README.md                      # Project documentation
+
 ```
-
-## Installation & Setup
-
-### Prerequisites
-
-- Go 1.21 or higher installed ([Download Go](https://golang.org/dl/))
-
-### Steps
-
-1. **Navigate to the backend directory**:
-   ```bash
-   cd backend
-   ```
-
-2. **Run the Go server**:
-   ```bash
-   go run main.go
-   ```
-
-3. **Access the application**:
-   Open your browser and visit: `http://localhost:8080`
-
-## Usage
 
 ### Encoding a Message
 
@@ -162,6 +141,9 @@ The tool combines **Least Significant Bit (LSB)** steganography with **AES encry
 - Always use strong passwords for sensitive data
 - The same password must be used for both encoding and decoding
 
+## Installation & Setup -My server is Ubuntu2.24
+
+
 ## Production Deployment
 
 ### Prerequisites
@@ -173,13 +155,10 @@ The tool combines **Least Significant Bit (LSB)** steganography with **AES encry
 
 ```bash
 # Update system packages
-sudo apt update && sudo apt upgrade -y
+sudo apt update
 
 # Install Go
-wget https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
-sudo tar -C /usr/local -xzf go1.21.5.linux-amd64.tar.gz
-echo 'export PATH=$PATH:/usr/local/bin/go' >> ~/.bashrc
-source ~/.bashrc
+sudo apt install go-lang -y
 
 # Verify Go installation
 go version
@@ -299,7 +278,7 @@ Point your domain to your server:
 2. Add an **A Record**:
    - **Type**: A
    - **Name**: stegano (or @ for root domain)
-   - **Value**: 54.169.158.30
+   - **Value**: {YourIP}
    - **TTL**: Automatic or 300
 
 Wait for DNS propagation (usually 5-15 minutes).
