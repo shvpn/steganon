@@ -1,4 +1,4 @@
-# Steganography Tool By Ork Senghout
+# Steganography Tool By Ork Senghout Group 2 (Individual)
 ## Note: deploy and update script are for automate deployment.However, this might not work on some server. So we can deploy it manually throught this README
 
 A modern web-based steganography tool that allows you to hide secret messages inside images using LSB (Least Significant Bit) encoding. Built with HTML, CSS, JavaScript frontend and Go backend.
@@ -309,7 +309,7 @@ Test auto-renewal:
 sudo certbot renew --dry-run
 ```
 
-### Step 7: Configure Firewall
+### Step 7: Configure Firewall (You can Just Diable firewall)
 
 ```bash
 # Allow Nginx through firewall
@@ -319,7 +319,7 @@ sudo ufw enable
 sudo ufw status
 ```
 
-### Step 8: Update Go Backend for Production
+### Step 8: Update Go Backend for Production(Optinal- Security consideration)
 
 Update the CORS settings in `backend/main.go` for production:
 
@@ -339,17 +339,6 @@ go build -o stegano main.go
 sudo systemctl restart stegano
 ```
 
-### Step 9: Update Frontend API URL
-
-Update `frontend/script.js` to use the production domain:
-
-```javascript
-// Change from:
-const API_BASE_URL = 'http://localhost:8080/api';
-
-// To:
-const API_BASE_URL = '/api';  // Nginx will proxy to backend
-```
 
 ### Verification
 
@@ -433,4 +422,5 @@ Feel free to fork, modify, and submit pull requests!
 
 ## Credits
 
-Built with ❤️ for cryptography enthusiasts and students.
+Lect.Mr. Meas Sothearath
+AI
