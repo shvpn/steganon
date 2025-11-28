@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 # Configuration
 APP_DIR="/var/www/stegano"
 DOMAIN="stegano.shvpn.live"
-SERVER_IP="54.169.190.81"
+SERVER_IP="$(curl -s http://checkip.amazonaws.com/)"
 
 echo -e "${YELLOW}Step 1: Installing dependencies...${NC}"
 sudo apt update
