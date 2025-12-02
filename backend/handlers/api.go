@@ -6,7 +6,7 @@ import (
 	"image/png"
 	"log"
 	"net/http"
-	"steganography/utils"
+	"steganography/utils" // encrypt and decrpt functions are in this package
 )
 
 // EncodeRequest represents the encoding request structure
