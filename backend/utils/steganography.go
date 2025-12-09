@@ -11,13 +11,13 @@ func EncodeMessageInImage(img image.Image, message string) *image.RGBA {
 	bounds := img.Bounds()
 	encoded := image.NewRGBA(bounds)
 
-	// Copy original image
+	// Copy img
 	copyImage(encoded, img, bounds)
 
-	// Prepare data to hide (length header + message)
+	// make (length header + message)
 	dataToHide := prepareDataWithHeader(message)
 
-	// Encode data into image pixels
+	// hide in pixels
 	encodeDataInPixels(encoded, dataToHide, bounds)
 
 	return encoded

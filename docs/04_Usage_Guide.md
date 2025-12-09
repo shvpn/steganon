@@ -1,46 +1,5 @@
 # IV. Usage Guide
 
-This guide provides step-by-step instructions on how to build, run, and use the Steganography Tool.
-
-## Prerequisites
--   **Go**: Version 1.21 or higher installed.
--   **Web Browser**: Chrome, Firefox, Edge, or Safari.
--   **Operating System**: Windows, Linux, or macOS.
-
-## Building and Running
-
-### 1. Local Development (Windows/Linux/Mac)
-
-1.  **Navigate to the backend directory**:
-    ```bash
-    cd backend
-    ```
-
-2.  **Run the server**:
-    ```bash
-    go run main.go
-    ```
-    *Output:*
-    ```
-    🚀 Steganography server running on http://localhost:8080
-    📁 Frontend available at: http://localhost:8080
-    ```
-
-3.  **Access the Application**:
-    Open your web browser and go to `http://localhost:8080`.
-
-### 2. Production Deployment (Ubuntu Server)
-
-An automated script is provided for deployment.
-
-1.  **Upload the code** to your server.
-2.  **Run the deployment script**:
-    ```bash
-    chmod +x deploy.sh
-    sudo ./deploy.sh
-    ```
-    This will install Nginx, Certbot, build the app, and set up a systemd service.
-
 ## User Guide
 
 ### Feature 1: Encoding (Hiding a Message)

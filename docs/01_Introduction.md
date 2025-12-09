@@ -1,7 +1,7 @@
 # I. Introduction / Background
 
 ## Project Goal
-The primary goal of this project is to develop a secure and user-friendly **Steganography Tool** that allows users to hide secret text messages within digital images. Unlike traditional encryption, which scrambles data but leaves the communication visible, this tool aims to provide **covert communication** by concealing the very existence of the message.
+The primary goal of this project is to develop a secure and user-friendly **Steganography Tool** that allows users to hide secret text messages within digital images. Unlike traditional encryption, which scrambles data but leaves the communication visible, this tool aims to provide **covert communication** by concealing the very existence of the message with ultimate security in 2026.
 
 ## Problem Statement
 In an era of pervasive digital surveillance, protecting the privacy of communication is increasingly challenging.

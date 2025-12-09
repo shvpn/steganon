@@ -1,4 +1,4 @@
-# Steganography Tool By Ork Senghout Group 2 (Individual)
+# Steganography Tool By Ork Senghout Group 2 (Individual) # **All the docs are provided in docs directory** to look for further detail
 ## Note: deploy and update script are for automate deployment.However, this might not work on some server. So we can deploy it manually throught this README
 
 A modern web-based steganography tool that allows you to hide secret messages inside images using LSB (Least Significant Bit) encoding. Built with HTML, CSS, JavaScript frontend and Go backend.

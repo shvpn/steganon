@@ -3,17 +3,6 @@
 ## System Overview
 The Steganography Tool follows a classic **Client-Server Architecture**. It is designed to be stateless, ensuring scalability and privacy (no user data is stored on the server).
 
-### High-Level Architecture
-
-```mermaid
-graph LR
-    User[User] -- Browser --> Frontend[Frontend (HTML/JS)]
-    Frontend -- HTTP POST --> Backend[Backend API (Go)]
-    Backend -- Process --> Logic[Core Logic (Crypto/Stegano)]
-    Logic -- Return --> Backend
-    Backend -- Response --> Frontend
-```
-
 ## Data Flow Diagrams
 
 ### 1. Encoding Process (Hiding a Message)
