@@ -31,7 +31,7 @@ func EncryptMessage(message string, password string) ([]byte, error) {
 		return nil, err
 	}
 
-	ciphertext := gcm.Seal(nonce, nonce, []byte(message), nil)
+	ciphertext := gcm.Seal(nil, nonce, []byte(message), nil)
 	return ciphertext, nil
 }
 
