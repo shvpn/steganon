@@ -9,41 +9,32 @@ import (
 	"io"
 )
 
-// EncryptMessage encrypts a message using AES-256-GCM with SHA-256 hashed password
 func EncryptMessage(message string, password string) ([]byte, error) {
 	if password == "" {
-		// No password, return plain message
 		return []byte(message), nil
 	}
-
-	// Hash password with SHA-256 to get 32-byte key
 	hash := sha256.Sum256([]byte(password))
 	key := hash[:]
 
-	// Create cipher block
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
 	}
 
-	// Create GCM mode
 	gcm, err := cipher.NewGCM(block)
 	if err != nil {
 		return nil, err
 	}
 
-	// Generate nonce
-	nonce := make([]byte, gcm.NonceSize())
+	nonce := make([]byte, gcm.NonceSize()) //use gcm.NonceSize() which is 12 bytes for performances.
 	if _, err := io.ReadFull(rand.Reader, nonce); err != nil {
 		return nil, err
 	}
 
-	// Encrypt and append nonce
 	ciphertext := gcm.Seal(nonce, nonce, []byte(message), nil)
 	return ciphertext, nil
 }
 
-// DecryptMessage decrypts a message using AES-256-GCM with SHA-256 hashed password
 func DecryptMessage(encrypted []byte, password string) (string, error) {
 	if password == "" {
 		// No password, return as plain text
